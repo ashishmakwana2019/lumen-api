@@ -80,27 +80,27 @@ $router->group(['prefix' => 'api/', 'namespace' => 'Backend', 'middleware' => 'a
             'as' => 'permissions.destroy', 'uses' => 'PermissionController@destroy'
         ]);
     });
-
-    /**
-     * Role management routes
-     */
-    $router->group(['middleware' => 'module:Roles', 'prefix' => 'roles'], function () use ($router) {
-        $router->get('/', [
-            'as' => 'roles.index', 'uses' => 'RoleController@index'
-        ]);
-        $router->post('/', [
-            'as' => 'roles.store', 'uses' => 'RoleController@store'
-        ]);
-        $router->get('/{id}', [
-            'as' => 'roles.show', 'uses' => 'RoleController@show'
-        ]);
-        $router->put('/{id}', [
-            'as' => 'roles.update', 'uses' => 'RoleController@update'
-        ]);
-        $router->delete('/{id}', [
-            'as' => 'roles.destroy', 'uses' => 'RoleController@destroy'
-        ]);
-    });
+//
+//    /**
+//     * Role management routes
+//     */
+//    $router->group(['middleware' => 'module:Roles', 'prefix' => 'roles'], function () use ($router) {
+//        $router->get('/', [
+//            'as' => 'roles.index', 'uses' => 'RoleController@index'
+//        ]);
+//        $router->post('/', [
+//            'as' => 'roles.store', 'uses' => 'RoleController@store'
+//        ]);
+//        $router->get('/{id}', [
+//            'as' => 'roles.show', 'uses' => 'RoleController@show'
+//        ]);
+//        $router->put('/{id}', [
+//            'as' => 'roles.update', 'uses' => 'RoleController@update'
+//        ]);
+//        $router->delete('/{id}', [
+//            'as' => 'roles.destroy', 'uses' => 'RoleController@destroy'
+//        ]);
+//    });
     /**
      * User management routes
      */

@@ -96,6 +96,14 @@ $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 
 
+/**
+ * This is Standalone role module
+ * experiment for standalone package
+ * TODO : Need to review
+ */
+$app->register(Modules\Role\RoleServiceProvider::class);
+
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
