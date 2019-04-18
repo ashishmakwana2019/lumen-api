@@ -21,7 +21,10 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-$app->withFacades();
+$app->withFacades(true, [
+    Tymon\JWTAuth\Facades\JWTAuth::class => 'JWTAuth',
+    Tymon\JWTAuth\Facades\JWTFactory::class => 'JWTFactory'
+]);
 
 $app->withEloquent();
 
@@ -94,6 +97,8 @@ $app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't ha
 $app->register(Spatie\Permission\PermissionServiceProvider::class);
 $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+
 
 
 /*
@@ -113,6 +118,7 @@ $app->router->group([
     require __DIR__ . '/../routes/web.php';
 });
 
+$app->configure('jwt');
 $app->configure('permission');
 $app->configure('message-broker');
 $app->configure('app');

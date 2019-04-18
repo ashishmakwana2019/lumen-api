@@ -10,12 +10,19 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+use \Tymon\JWTAuth\JWTAuth;
 
 $router->get('/', function () use ($router) {
     return [
+        'user' => app('config')->get('jwt.user'),
         'appVersion' => $router->app->version(),
     ];
 });
+
+$router->post('/api/t', [
+    'as' => 'tlogin', 'uses' => 'Auth\LoginController@postLogin'
+]);
+
 /**
  * Auth routes
  */

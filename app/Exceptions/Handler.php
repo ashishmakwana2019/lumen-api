@@ -54,6 +54,12 @@ class Handler extends ExceptionHandler
                 'code' => 404,
                 'message' => "{$modelName}{$ids} does not exist in system!"
             ], 404);
+        }else if($exception instanceof ValidationException){
+            return response()->json([
+                'code' => 422,
+                'message' => $exception->getMessage(),
+                'errorMessages' => $exception->errors()
+            ], 422);
         }else if($exception instanceof NotFoundHttpException){
             return response()->json([
                 'code' => 404,
