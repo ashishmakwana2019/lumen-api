@@ -54,11 +54,22 @@ class Handler extends ExceptionHandler
                 'code' => 404,
                 'message' => "{$modelName}{$ids} does not exist in system!"
             ], 404);
+        }else if($exception instanceof ValidationException){
+            return response()->json([
+                'code' => 422,
+                'message' => $exception->getMessage(),
+                'errorMessages' => $exception->errors()
+            ], 404);
         }else if($exception instanceof NotFoundHttpException){
             return response()->json([
                 'code' => 404,
                 'message' => 'HTTP request does not exist'
             ], 404);
+        }else if($exception instanceof \Swift_TransportException){
+            return response()->json([
+                'code' => 500,
+                'message' => $exception->getMessage()
+            ], 500);
         }
         return parent::render($request, $exception);
     }

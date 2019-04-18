@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Traits\ResetsPasswords;
 
 class ForgotPasswordController extends Controller
 {
+    use ResetsPasswords;
+
+    protected $broker = 'users';
+
     /**
      * Create a new controller instance.
      *
@@ -13,7 +18,7 @@ class ForgotPasswordController extends Controller
      */
     public function __construct()
     {
-        //
+        $this->broker = 'users';
     }
 
     /**

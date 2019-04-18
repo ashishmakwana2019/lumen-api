@@ -27,7 +27,10 @@ $router->group(['prefix' => 'api/auth', 'namespace' => 'Auth'], function () use 
         'as' => 'register', 'uses' => 'RegisterController@register'
     ]);
     $router->post('/forgot-password', [
-        'as' => 'forgot.password', 'uses' => 'ForgotPasswordController@forgotPassword'
+        'as' => 'password.email', 'uses' => 'ForgotPasswordController@postEmail'
+    ]);
+    $router->post('/password/reset/{token}', [
+        'as' => 'password.reset', 'uses' => 'ForgotPasswordController@postReset'
     ]);
 });
 
@@ -52,6 +55,9 @@ $router->group(['prefix' => 'api/', 'middleware' => 'auth:api', 'namespace' => '
     ]);
     $router->post('/change-password', [
         'as' => 'change.password', 'uses' => 'ChangePasswordController@changePassword'
+    ]);
+    $router->get('/logout', [
+        'as' => 'logout', 'uses' => 'ProfileController@logout'
     ]);
 });
 

@@ -28,7 +28,9 @@ class PermissionController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'permissions' => $this->repository->getAll($request->all())
+            'data' => [
+                'permissions' => $this->repository->getAll($request->all())
+            ]
         ], 200);
     }
 
@@ -41,7 +43,7 @@ class PermissionController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'form' => []
+            'data' => []
         ], 200);
     }
 
@@ -54,7 +56,10 @@ class PermissionController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'permission' => $this->repository->store($request->only(['name', 'module_name']))
+            'message' => 'stored',
+            'data' => [
+                'permission' => $this->repository->store($request->only(['name', 'module_name']))
+            ]
         ], 200);
     }
 
@@ -68,7 +73,9 @@ class PermissionController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'permission' => $this->repository->find($id)
+            'data' =>[
+                'permission' => $this->repository->find($id)
+            ]
         ], 200);
     }
 
@@ -82,7 +89,9 @@ class PermissionController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'permission' => $this->repository->find($id)
+            'data' =>[
+                'permission' => $this->repository->find($id)
+            ]
         ], 200);
     }
 
@@ -97,7 +106,10 @@ class PermissionController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'permission' => $this->repository->update($id, $request->only(['name', 'module_name']))
+            'message' => 'updated',
+            'data' => [
+                'permission' => $this->repository->update($id, $request->only(['name', 'module_name']))
+            ]
         ], 200);
     }
 
@@ -111,7 +123,10 @@ class PermissionController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'permission' => $this->repository->delete($id)
+            'message' => 'deleted',
+            'data' => [
+                'permission' => $this->repository->delete($id)
+            ]
         ], 200);
     }
 }

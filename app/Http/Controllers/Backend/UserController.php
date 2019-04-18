@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     /**
      * @var $repository
      */
@@ -39,6 +38,7 @@ class UserController extends Controller
     public function create()
     {
         return response()->json([
+            'code' => 200,
             'form' => []
         ], 200);
     }
@@ -52,6 +52,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         return response()->json([
+            'code' => 200,
+            'message' => 'stored',
             'user' => $this->repository->store($request->only(['name', 'email', 'password']))
         ], 200);
     }
@@ -66,6 +68,7 @@ class UserController extends Controller
     {
         $user = $this->repository->find($id);
         return response()->json([
+            'code' => 200,
             'permissions' => $user->getAllPermissions(),
             'user' => $user
         ], 200);
@@ -80,6 +83,7 @@ class UserController extends Controller
     public function edit($id)
     {
         return response()->json([
+            'code' => 200,
             'user' => $this->repository->find($id)
         ], 200);
     }
@@ -94,6 +98,8 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         return response()->json([
+            'code' => 200,
+            'message' => 'updated',
             'user' => $this->repository->update($id, $request->only(['name', 'email', 'password']))
         ], 200);
     }
@@ -107,6 +113,8 @@ class UserController extends Controller
     public function destroy($id)
     {
         return response()->json([
+            'code' => 200,
+            'message' => 'deleted',
             'user' => $this->repository->delete($id)
         ], 200);
     }

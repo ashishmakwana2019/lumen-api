@@ -2,12 +2,16 @@
 
 namespace App\Repositories\Backend\User;
 
-use App\User;
+use App\Models\User;
 
 class UserRepository implements UserContract
 {
 
     protected $model;
+
+    protected $select = [
+        'id', 'name', 'email', 'created_at', 'updated_at'
+    ];
 
     public function __construct(User $model)
     {
@@ -22,7 +26,8 @@ class UserRepository implements UserContract
     public function getAll(array $filter = [])
     {
         $perPage = isset($filter['perPage']) ? $filter['perPage'] : 20;
-        return $this->model->with('roles:id,name')->orderBy('id', 'desc')->paginate($perPage);
+        return $this->model->select($this->select)->with('roles:id,name')->orderBy('id', 'desc')->paginate($perPage);
+
     }
 
     /**
@@ -32,7 +37,7 @@ class UserRepository implements UserContract
      */
     public function find($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->select($this->select)->with('roles:id,name')->findOrFail($id);
     }
 
     /**
@@ -42,7 +47,7 @@ class UserRepository implements UserContract
      */
     public function edit($id)
     {
-        return $this->model->find($id);
+        return $this->model->select($this->select)->find($id);
     }
 
     /**
@@ -63,11 +68,13 @@ class UserRepository implements UserContract
     public function store(array $input)
     {
         // Encrypt password
-        if(isset($input['password'])){
-            $input['password'] = app('hash')->make($input['password']);
+        if (isset($input['password'])) {
+            $input['password'] = encryptPassword($input['password']);
         }
         $user = $this->model->create($input);
-        $user->assignRole('');
+        $role = !empty($input['role']) ? $input['role'] : 'user';
+        $user->assignRole($role);
+        return $user;
     }
 
     /**
@@ -79,13 +86,12 @@ class UserRepository implements UserContract
     public function update($id, array $input)
     {
         $user = $this->model->find($id);
-
         // Ignore email update
-        if(isset($input['email']) && $user->email == $input['email']){
+        if (isset($input['email']) && $user->email == $input['email']) {
             unset($input['email']);
         }
-        if(isset($input['password'])){
-            $input['password'] = app('hash')->make($input['password']);
+        if (isset($input['password'])) {
+            $input['password'] = encryptPassword($input['password']);
         }
         return $this->model->find($id)->update($input);
     }

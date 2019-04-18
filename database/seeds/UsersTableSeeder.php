@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $password = app('hash')->make(12345678);
+        $password = encryptPassword(12345678);
         $defaultUsers = [
             ['email' => 'superadmin@mailinator.com', 'name' => 'superadmin', 'role' => 'SuperAdmin'],
             ['email' => 'developer@mailinator.com', 'name' => 'developer', 'role' => 'Developer'],
@@ -20,11 +20,11 @@ class UsersTableSeeder extends Seeder
         ];
 
         foreach ($defaultUsers as $userInput) {
-            if (\App\User::where('email', $userInput['email'])->count() === 0) {
+            if (\App\Models\User::where('email', $userInput['email'])->count() === 0) {
                 $role = $userInput['role'];
                 unset($userInput['role']);
                 $userInput['password'] = $password;
-                $user = \App\User::firstOrCreate($userInput);
+                $user = \App\Models\User::firstOrCreate($userInput);
                 if (!$user->hasRole($role)) {
                     $user->assignRole($role);
                 }

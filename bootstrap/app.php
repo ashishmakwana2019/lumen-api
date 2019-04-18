@@ -87,6 +87,9 @@ $app->routeMiddleware([
 */
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
+$app->register(\Illuminate\Auth\Passwords\PasswordResetServiceProvider::class);
+$app->register(Illuminate\Notifications\NotificationServiceProvider::class);
+$app->register(\Illuminate\Mail\MailServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Spatie\Cors\CorsServiceProvider::class);
@@ -113,6 +116,7 @@ $app->router->group([
     require __DIR__ . '/../routes/web.php';
 });
 
+$app->configure('mail');
 $app->configure('permission');
 $app->configure('message-broker');
 $app->configure('app');

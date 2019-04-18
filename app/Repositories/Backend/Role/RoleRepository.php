@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Backend\Role;
 
-use Spatie\Permission\Models\Role;
+use App\Models\Role;
 
 class RoleRepository implements RoleContract
 {
@@ -22,23 +22,23 @@ class RoleRepository implements RoleContract
     public function getAll(array $filter = [])
     {
         $perPage = isset($filter['perPage']) ? $filter['perPage'] : 20;
-        return $this->model->orderBy('id', 'desc')->paginate($perPage);
+        return $this->model->select('id', 'name')->orderBy('id', 'desc')->paginate($perPage);
     }
 
     /**
      * Find single role
      * @param $id
-     * @return mixed
+     * @return Role
      */
     public function find($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->select('id', 'name', 'guard_name')->with('permissions')->findOrFail($id);
     }
 
     /**
      * Edit role
      * @param $id
-     * @return mixed
+     * @return Role
      */
     public function edit($id)
     {
@@ -58,25 +58,38 @@ class RoleRepository implements RoleContract
     /**
      * Create new role
      * @param array $input
-     * @return mixed
+     * @return Role
      */
     public function store(array $input)
     {
-        return $this->model->create($input);
+        // Store role
+        $model = $this->model->create([
+            'name' => $input['name']
+        ]);
+
+        // Assign permission to role
+        $model->assignPermissions(!empty($input['permissions']) ? $input['permissions'] : []);
+
+        return $model;
     }
 
     /**
      * Update role
      * @param $id
      * @param array $input
-     * @return mixed
+     * @return Role
      */
     public function update($id, array $input)
     {
         $model = $this->model->find($id);
-        return $model->update([
+        // Assign permission to role
+        $model->assignPermissions(!empty($input['permissions']) ? $input['permissions'] : []);
+
+        $model->update([
             'name' => $input['name']
         ]);
+
+        return $model;
     }
 
 }

@@ -30,7 +30,9 @@ class RoleController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'roles' => $this->repository->getAll($request->all())
+            'data' => [
+                'roles' => $this->repository->getAll($request->all())
+            ]
         ], 200);
     }
 
@@ -44,7 +46,10 @@ class RoleController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'role' => $this->repository->store($request->only(['name']))
+            'message' => 'stored',
+            'data' => [
+                'role' => $this->repository->store($request->only('name','permissions'))
+            ]
         ], 200);
     }
 
@@ -56,15 +61,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = $this->repository->find($id);
-        $permissions = $role->getAllPermissions();
         return response()->json([
             'code' => 200,
-            'rolePermissions' => $permissions->groupBy('module_name')->map(function ($items) {
-                return $items->pluck('id')->toArray();
-            }),
-            'modules' => Permission::all()->groupBy('module_name'),
-            'role' => $this->repository->find($id)
+            'data' => [
+                'role' => $this->repository->find($id)
+            ]
         ], 200);
     }
 
@@ -79,7 +80,10 @@ class RoleController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'role' => $this->repository->update($id, $request->only(['name', 'permissions']))
+            'message' => 'updated',
+           'data' => [
+               'role' => $this->repository->update($id, $request->only(['name', 'permissions']))
+           ]
         ], 200);
     }
 
@@ -93,7 +97,10 @@ class RoleController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'role' => $this->repository->delete($id)
+            'message' => 'deleted',
+            'data' => [
+                'role' => $this->repository->delete($id)
+            ]
         ], 200);
     }
 }

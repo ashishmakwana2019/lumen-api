@@ -8,6 +8,9 @@ class PermissionRepository implements PermissionContract
 {
 
     protected $model;
+    protected $select = [
+        'id', 'name', 'guard_name'
+    ];
 
     public function __construct(Permission $model)
     {
@@ -15,29 +18,29 @@ class PermissionRepository implements PermissionContract
     }
 
     /**
-     * Get All permissions
+     * Get all permissions
      * @param array $filter
-     * @return mixed
+     * @return Permission
      */
     public function getAll(array $filter = [])
     {
-        return $this->model->orderBy('id', 'desc')->paginate(isset($filter['perPage']) ? $filter['perPage'] : 20);
+        return $this->model->select($this->select)->orderBy('id', 'desc')->paginate(isset($filter['perPage']) ? $filter['perPage'] : 20);
     }
 
     /**
      * Find single permission
      * @param $id
-     * @return mixed
+     * @return Permission
      */
     public function find($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->select($this->select)->findOrFail($id);
     }
 
     /**
      * Edit permission
      * @param $id
-     * @return mixed
+     * @return Permission
      */
     public function edit($id)
     {
@@ -57,7 +60,7 @@ class PermissionRepository implements PermissionContract
     /**
      * Create new permission
      * @param array $input
-     * @return mixed
+     * @return Permission
      */
     public function store(array $input)
     {
@@ -68,12 +71,14 @@ class PermissionRepository implements PermissionContract
      * Update permission
      * @param $id
      * @param array $input
-     * @return mixed
+     * @return Permission
      */
     public function update($id, array $input)
     {
-        $model = $this->model->find($id);
-        return $model->update($input);
+        $model = $this->find($id);
+        $model->fill($input);
+        $model->save();
+        return $model;
     }
 
 }
